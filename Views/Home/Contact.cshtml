@@ -1,0 +1,56 @@
+﻿
+@{
+    Layout = "~/Views/Shared/home_layout.cshtml";
+}
+
+<section className="contact-page">
+    <div className="contact-container">
+        <h1 className="page-title">Liên Hệ Với Chúng Tôi</h1>
+        <p className="page-subtitle">
+            Chúng tôi luôn sẵn lòng hỗ trợ bạn. Vui lòng liên hệ qua các kênh dưới đây:
+        </p>
+
+        <div className="contact-sections-wrapper">
+            <div className="contact-section contact-info">
+                <h2 className="section-title">Thông Tin Liên Hệ</h2>
+                <div className="contact-item">
+                     <FaZalo className="icon zalo-icon" />
+                    <span className="icon">📱</span>
+                    <a href="https://zalo.me/0338557731" target="_blank" rel="noopener noreferrer">
+                        Zalo: 0338557731 (Trung Kiên)
+                    </a>
+                </div>
+                <div className="contact-item">
+                    <FaZalo className="icon zalo-icon" />
+                    <span className="icon">📱</span>
+                    <a href="https://web.facebook.com/ongiabao.sttmuoilamlopchinamot.9" target="_blank" rel="noopener noreferrer">
+                        Devoloper: Giabaoonthcs123@gmail.com (Ôn Gia Bảo )
+                    </a>
+                </div>
+                <div className="contact-item">
+                    {/* <FaEnvelope className="icon email-icon" /> */}
+                    <span className="icon">📧</span>
+                    <a href="mailto:copyright@bourbon.fullbuster">
+                        Email: copyright@bourbon.fullbuster
+                    </a>
+                </div>
+                <div className="contact-item">
+                    <span className="icon">📍</span>
+                    <span>Địa chỉ: 123 Đường ABC, Quận XYZ, Thành phố HCM</span>
+                </div>
+            </div>
+
+            <div className="contact-section contact-notice">
+                <span className="icon notice-icon">⚠️</span>
+                <h2 className="section-title">Lưu Ý Quan Trọng</h2>
+                <p>Nghiêm cấm mọi hành vi dùng chung tài khoản Google, sao chép, crack khóa học, hoặc chia sẻ khóa học trái phép.</p>
+                <p>Nếu chúng tôi phát hiện bất kỳ vi phạm nào, tài khoản của bạn sẽ bị khóa vĩnh viễn mà không được hoàn lại học phí.</p>
+            </div>
+        </div>
+
+        <div className="contact-footer">
+            <div className="footer-divider"></div>
+            <p>&copy; {currentYear} Khóa Học Tổng Hợp. All rights reserved.</p>
+        </div>
+    </div>
+</section>

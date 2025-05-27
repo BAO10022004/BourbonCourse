@@ -1,0 +1,150 @@
+﻿@using Web_KhoaHoc.Models
+@{
+    ViewData["Title"] = "Danh sách khóa học";
+    Layout = "~/Views/Shared/home_layout.cshtml";
+    var teachers = ViewBag.Teacher as List<Web_KhoaHoc.Models.TeacherCourse>;
+    var subjects = ViewBag.Subject as List<Web_KhoaHoc.Models.Subject>;
+    var courses = ViewBag.Course as List<Web_KhoaHoc.Models.Course>;
+}
+
+<section class="hero-section">
+    <div class="hero-content">
+        <h1>Khám phá khóa học với giáo viên hàng đầu</h1>
+        <p>Tìm kiếm giáo viên phù hợp với nhu cầu học tập của bạn</p>
+    </div>
+</section>
+
+<div class="filter-section">
+    <div class="filter-container">
+        <h2 class="filter-title">Tìm kiếm giáo viên</h2>
+        <form method="get" action="@Url.Action("Main", "Home")">
+            <div class="filter-grid">
+                <div class="filter-item">
+                    <div class="form-group">
+                        <label for="subjectId">
+                            <i class="filter-icon fas fa-book"></i>
+                            Môn học
+                        </label>
+                        <div class="select-wrapper">
+                            <select id="subjectId" name="subjectId" class="form-control" onchange="this.form.submit()">
+                                <option value="">Tất cả môn học</option>
+                                @foreach (var subject in subjects)
+                                {
+                                    <option value="@subject.id" @(Context.Request.Query["subjectId"].ToString() == subject.id.ToString() ? "selected" : "")>
+                                        @subject.subjectName
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-item">
+                    <div class="form-group">
+                        <label for="courseId">
+                            <i class="filter-icon fas fa-graduation-cap"></i>
+                            Khóa học
+                        </label>
+                        <div class="select-wrapper">
+                            <select id="courseId" name="courseId" class="form-control" onchange="this.form.submit()">
+                                <option value="">Tất cả khóa học</option>
+                                @foreach (var course in courses)
+                                {
+                                    <option value="@course.id" @(Context.Request.Query["courseId"].ToString() == course.id.ToString() ? "selected" : "")>
+                                        @course.courseName
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-item search-item">
+                    <div class="form-group">
+                        <label for="searchTerm">
+                            <i class="filter-icon fas fa-search"></i>
+                            Tìm kiếm
+                        </label>
+                        <div class="search-input-group">
+                            <input type="text" id="searchTerm" name="searchTerm" class="form-control"
+                                   placeholder="Tên giáo viên..." value="@Context.Request.Query["searchTerm"]">
+                            <button type="submit" class="search-btn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-item reset-item">
+                    <div class="form-group">
+                        <label class="invisible">Đặt lại</label>
+                        <a href="@Url.Action("Main", "Home")" class="reset-btn">
+                            <i class="fas fa-redo"></i>
+                            <span>Đặt lại</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Display Results -->
+<div class="results-container">
+    @if (teachers == null || !teachers.Any())
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <span>Không tìm thấy kết quả phù hợp.</span>
+        </div>
+    }
+    else
+    {
+        foreach (var course in courses)
+        {
+            var courseTeachers = teachers.Where(t => t.course?.id == course.id).ToList();
+            if (courseTeachers.Any())
+            {
+                <div class="course-section">
+                    <h2 class="course-section-title">@course.courseName</h2>
+
+                    @foreach (var subject in subjects)
+                    {
+                        var subjectTeachers = courseTeachers.Where(t => t.teacher?.subject?.id == subject.id).ToList();
+                        if (subjectTeachers.Any())
+                        {
+                            <div class="subject-section">
+                                <h3 class="subject-section-title">@subject.subjectName</h3>
+                                <div class="teachers-grid">
+                                    @foreach (var teacher in subjectTeachers)
+                                    {
+                                        <div class="teacher-card">
+                                            <div class="teacher-avatar">
+                                                <img src="~/images/teacher-placeholder.jpg" alt="@teacher.teacher.teacherName">
+                                            </div>
+                                            <div class="teacher-details">
+                                                <h4 class="teacher-name">@teacher.teacher.teacherName</h4>
+                                                <p class="teacher-subject">@teacher.teacher.subject.subjectName</p>
+                                                <p class="teacher-course">@teacher.course.courseName</p>
+                                                <div class="teacher-actions">
+                                                    <a href="@Url.Action("TeacherDetails", "Home", new { id = teacher.teacher.id })" class="view-btn">
+                                                        <i class="fas fa-eye"></i>
+                                                        <span>Chi tiết</span>
+                                                    </a>
+                                                    <a href="@Url.Action("BuyCourse", "Home", new { teacherId = teacher.teacher.id, courseId = teacher.course.id })" class="buy-btn">
+                                                        <i class="fas fa-shopping-cart"></i>
+                                                        <span>Mua</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        }
+    }
+</div>

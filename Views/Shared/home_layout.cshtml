@@ -1,0 +1,762 @@
+﻿<!-- _Layout.cshtml (Main layout file) -->
+@{
+    // No layout reference here as this is the main layout
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - EduLearn</title>
+    <style>
+        /* site.css */
+
+:root {
+    --primary-color: #4361ee;
+    --primary-light: #4895ef;
+    --secondary-color: #3f37c9;
+    --accent-color: #f72585;
+    --text-color: #333;
+    --text-light: #666;
+    --text-lighter: #999;
+    --bg-color: #fff;
+    --bg-light: #f8f9fa;
+    --bg-dark: #212529;
+    --success-color: #38b000;
+    --warning-color: #ffaa00;
+    --danger-color: #d90429;
+    --border-color: #dee2e6;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-light);
+    line-height: 1.6;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: var(--transition);
+}
+
+    a:hover {
+        color: var(--secondary-color);
+    }
+
+button, .btn {
+    cursor: pointer;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 10px 15px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+/* Header Styles */
+header {
+    background-color: var(--bg-color);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+    header .container {
+        padding: 15px;
+    }
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+    .logo span {
+        color: var(--accent-color);
+    }
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+    .nav-links a {
+        color: var(--text-color);
+        font-weight: 500;
+        position: relative;
+        padding: 5px 0;
+    }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+            .nav-links a.active::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background-color: var(--primary-color);
+            }
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-name {
+    font-weight: 500;
+}
+
+.login-btn {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 15px;
+    border-radius: var(--border-radius);
+}
+
+    .login-btn:hover {
+        background-color: var(--secondary-color);
+        color: white;
+    }
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+    margin-bottom: 40px;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Filter Section */
+.filter-section {
+    margin-bottom: 40px;
+}
+
+.filter-container {
+    background-color: var(--bg-color);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.filter-title {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+    .form-group label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+.filter-icon {
+    color: var(--primary-color);
+    font-size: 16px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--bg-light);
+    transition: var(--transition);
+}
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+.select-wrapper {
+    position: relative;
+}
+
+    .select-wrapper::after {
+        content: '▼';
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-lighter);
+        pointer-events: none;
+        font-size: 12px;
+    }
+
+.search-input-group {
+    position: relative;
+}
+
+.search-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-light);
+    padding: 5px;
+    cursor: pointer;
+}
+
+    .search-btn:hover {
+        color: var(--primary-color);
+    }
+
+.reset-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px 15px;
+    background-color: var(--bg-light);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-top: 24px;
+    transition: var(--transition);
+}
+
+    .reset-btn:hover {
+        background-color: var(--bg-dark);
+        color: white;
+    }
+
+.invisible {
+    visibility: hidden;
+}
+
+/* Results Container */
+.results-container {
+    margin-bottom: 60px;
+}
+
+.alert {
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-info {
+    background-color: rgba(67, 97, 238, 0.1);
+    color: var(--primary-color);
+    border: 1px solid rgba(67, 97, 238, 0.2);
+}
+
+.course-section {
+    margin-bottom: 40px;
+}
+
+.course-section-title {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary-light);
+}
+
+.subject-section {
+    margin-bottom: 30px;
+}
+
+.subject-section-title {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.teachers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.teacher-card {
+    background-color: var(--bg-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+
+    .teacher-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+.teacher-avatar {
+    height: 180px;
+    overflow: hidden;
+}
+
+    .teacher-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+
+.teacher-card:hover .teacher-avatar img {
+    transform: scale(1.05);
+}
+
+.teacher-details {
+    padding: 20px;
+}
+
+.teacher-name {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+.teacher-subject, .teacher-course {
+    color: var(--text-light);
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.teacher-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.view-btn, .buy-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    flex: 1;
+    justify-content: center;
+}
+
+.view-btn {
+    background-color: var(--bg-light);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+    .view-btn:hover {
+        background-color: var(--border-color);
+    }
+
+.buy-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+    .buy-btn:hover {
+        background-color: var(--secondary-color);
+    }
+
+/* Footer */
+footer {
+    background-color: var(--bg-dark);
+    color: white;
+    padding: 60px 0 20px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.footer-column h3 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.footer-column p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+    .footer-links li {
+        margin-bottom: 10px;
+    }
+
+    .footer-links a {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        transition: var(--transition);
+    }
+
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+
+.copyright {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+}
+    :root {
+        --primary-color: #4361ee;
+        --primary-hover: #3a56d4;
+        --secondary-color: #4cc9f0;
+        --accent-color: #f72585;
+        --light-bg: #f8f9fa;
+        --dark-text: #333;
+        --medium-text: #6c757d;
+        --light-text: #f8f9fa;
+        --border-color: #dee2e6;
+        --success-color: #2ecc71;
+        --card-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        --card-hover-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    /* Reset và base styles */
+    body {
+        font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        color: var(--dark-text);
+        background-color: #f6f8fa;
+        line-height: 1.6;
+    }
+
+    /* Card styling */
+    .card {
+        border: none;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 1.5rem;
+    }
+
+    .card:hover {
+        box-shadow: var(--card-hover-shadow);
+    }
+
+    .card-header {
+        border-bottom: 1px solid var(--border-color);
+        background-color: white;
+        border-radius: 10px 10px 0 0 !important;
+        padding: 1rem 1.25rem;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Video container */
+    .ratio-16x9 {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    iframe {
+        border-radius: 8px;
+    }
+
+    /* Document container */
+    .document-container {
+        background-color: #f8f9fa;
+        border-radius: 8px !important;
+        transition: all 0.3s ease;
+    }
+
+    .document-container:hover {
+        background-color: #eef1f5;
+    }
+
+    /* Buttons */
+    .btn-outline-primary {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+        border-radius: 6px;
+        font-weight: 500;
+        padding: 0.5rem 1.5rem;
+        transition: all 0.2s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* Accordion styling */
+    .accordion-item {
+        border: none;
+        margin-bottom: 3px;
+    }
+
+    .accordion-button {
+        border-radius: 6px;
+        font-weight: 500;
+        padding: 1rem 1.25rem;
+        color: var(--dark-text);
+        background-color: white;
+        box-shadow: none;
+    }
+
+    .accordion-button:not(.collapsed) {
+        color: var(--primary-color);
+        background-color: rgba(67, 97, 238, 0.05);
+        box-shadow: none;
+    }
+
+    .accordion-button:focus {
+        box-shadow: none;
+        border-color: var(--primary-color);
+    }
+
+    .accordion-button::after {
+        background-size: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    /* List group styling */
+    .list-group-item {
+        border-left: none;
+        border-right: none;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .list-group-item:first-child {
+        border-top: none;
+    }
+
+    .list-group-item:last-child {
+        border-bottom: none;
+    }
+
+    .list-group-item.active {
+        background-color: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        border-color: rgba(67, 97, 238, 0.1);
+        font-weight: 500;
+    }
+
+    .list-group-item-action:hover {
+        background-color: rgba(67, 97, 238, 0.05);
+        color: var(--primary-color);
+    }
+
+    /* Lesson list styling */
+    .list-group-item .bi-chevron-down {
+        transition: transform 0.3s ease;
+    }
+
+    .list-group-item .collapse.show + .bi-chevron-down,
+    .list-group-item [aria-expanded="true"] .bi-chevron-down {
+        transform: rotate(180deg);
+    }
+
+    a.list-group-item-action {
+        color: var(--dark-text);
+        border-radius: 4px !important;
+        margin-bottom: 2px;
+    }
+
+    a.list-group-item-action:hover {
+        color: var(--primary-color);
+    }
+
+    a.list-group-item-action.active {
+        background-color: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        border-left: 3px solid var(--primary-color) !important;
+    }
+
+    a.list-group-item-action .bi {
+        color: var(--medium-text);
+    }
+
+    a.list-group-item-action:hover .bi,
+    a.list-group-item-action.active .bi {
+        color: var(--primary-color);
+    }
+
+    /* Alert styling */
+    .alert {
+        border-radius: 8px;
+        border-left: 4px solid var(--primary-color);
+    }
+
+    .alert-info {
+        background-color: rgba(76, 201, 240, 0.1);
+        border-color: var(--secondary-color);
+        color: #0c5460;
+    }
+
+    /* Headings */
+    h4, h5 {
+        font-weight: 600;
+        color: var(--dark-text);
+    }
+
+    h5.border-bottom {
+        padding-bottom: 0.75rem;
+        border-bottom-color: var(--border-color) !important;
+    }
+
+    /* Icons */
+    .bi {
+        vertical-align: -0.125em;
+    }
+
+    
+
+    
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Edu<span>Learn</span></div>
+                <ul class="nav-links">
+                    <li><a href="@Url.Action("Main", "Home")" class="@(ViewContext.RouteData.Values["Action"].ToString() == "Main" ? "active" : "")">Trang Chủ</a></li>
+                    <li><a href="@Url.Action("MyCourse", "Home")" class="@(ViewContext.RouteData.Values["Action"].ToString() == "MyCourse" ? "active" : "")">Khóa Học</a></li>
+                    <li><a href="@Url.Action("Contact", "Home")" class="@(ViewContext.RouteData.Values["Action"].ToString() == "Contact" ? "active" : "")">Liên Hệ</a></li>
+                </ul>
+                <div class="user-actions">
+                    @if (Web_KhoaHoc.Session.Session.currentAccount != null)
+                    {
+                        <div class="profile">
+                            <span class="profile-name">@Web_KhoaHoc.Session.Session.currentAccount.username</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "Account")" class="login-btn">Đăng nhập</a>
+                    }
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        @RenderBody()
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Về EduLearn</h3>
+                    <p>EduLearn là nền tảng quản lý khóa học trực tuyến, giúp người học quản lý hiệu quả quá trình học tập của mình.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Khám Phá</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Tất Cả Khóa Học</a></li>
+                        <li><a href="#">Giảng Viên</a></li>
+                        <li><a href="#">Học Liệu</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Hỗ Trợ</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Trung Tâm Hỗ Trợ</a></li>
+                        <li><a href="#">Câu Hỏi Thường Gặp</a></li>
+                        <li><a href="#">Liên Hệ</a></li>
+                        <li><a href="#">Điều Khoản</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Kết Nối</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 EduLearn. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "/IrM43/waic=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\giaba\\source\\repos\\Web_KhoaHoc\\Web_KhoaHoc.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\giaba\\.nuget\\packages\\dotliquid\\2.3.197\\dotliquid.2.3.197.nupkg.sha512",
+    "C:\\Users\\giaba\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

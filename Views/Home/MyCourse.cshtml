@@ -1,0 +1,63 @@
+﻿@using Web_KhoaHoc.Models
+@{
+    ViewData["Title"] = "Danh sách khóa học";
+    Layout = "~/Views/Shared/home_layout.cshtml";
+    var teachers = ViewBag.Teacher as List<Web_KhoaHoc.Models.TeacherCourse>;
+    var subjects = ViewBag.Subject as List<Web_KhoaHoc.Models.Subject>;
+    var courses = ViewBag.Course as List<Web_KhoaHoc.Models.Course>;
+}
+
+<div class="results-container">
+    @if (teachers == null || !teachers.Any())
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <span>Không tìm thấy kết quả phù hợp.</span>
+        </div>
+    }
+    else
+    {
+        foreach (var course in courses)
+        {
+            var courseTeachers = teachers.Where(t => t.course?.id == course.id).ToList();
+            if (courseTeachers.Any())
+            {
+                <div class="course-section">
+                    <h2 class="course-section-title">@course.courseName</h2>
+
+                    @foreach (var subject in subjects)
+                    {
+                        var subjectTeachers = courseTeachers.Where(t => t.teacher?.subject?.id == subject.id).ToList();
+                        if (subjectTeachers.Any())
+                        {
+                            <div class="subject-section">
+                                <h3 class="subject-section-title">@subject.subjectName</h3>
+                                <div class="teachers-grid">
+                                    @foreach (var teacher in subjectTeachers)
+                                    {
+                                        <div class="teacher-card">
+                                            <div class="teacher-avatar">
+                                                <img src="~/images/teacher-placeholder.jpg" alt="@teacher.teacher.teacherName">
+                                            </div>
+                                            <div class="teacher-details">
+                                                <h4 class="teacher-name">@teacher.teacher.teacherName</h4>
+                                                <p class="teacher-subject">@teacher.teacher.subject.subjectName</p>
+                                                <p class="teacher-course">@teacher.course.courseName</p>
+                                                <div class="teacher-actions">
+                                                    <a href="@Url.Action("Index", "TeacherCourse", new { teacherCourseId =teacher.id })" class="buy-btn">
+                                                        <i class="fas fa-shopping-cart"></i>
+                                                        <span>Xem</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        }
+    }
+</div>

@@ -1,0 +1,207 @@
+﻿@using Web_KhoaHoc.Models
+@{
+    ViewData["Title"] = "Xem bài giảng";
+    Layout = "~/Views/Shared/home_layout.cshtml";
+    var divisions = ViewBag.Divisions as List<Division>;
+    var selectedDivision = ViewBag.SelectedDivision as Division;
+    var lessons = ViewBag.Lessons as List<Lesson>;
+    var selectedLesson = ViewBag.SelectedLesson as Lesson;
+    var subLessons = ViewBag.SubLessons as List<SubLesson>;
+    var selectedSubLesson = ViewBag.SelectedSubLesson as SubLesson;
+    var subLessonLinks = ViewBag.SubLessonLinks as List<SubLessonLink>;
+
+    var videoLink = subLessonLinks?.FirstOrDefault(l => l.type.id == 1 && l.subLesson.id == selectedSubLesson.id)?.link;
+    var documentLink = subLessonLinks?.FirstOrDefault(l => l.type.id == 2&& l.subLesson.id == selectedSubLesson.id)?.link;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Phần nội dung bên trái (Video và tư liệu) -->
+        <div class="col-lg-8 col-md-7">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="mb-3">@(selectedSubLesson?.subLessonName ?? "Vui lòng chọn bài giảng")</h4>
+                    <!-- Video YouTube -->
+                    @if (!string.IsNullOrEmpty(videoLink))
+                    {
+                        <div class="ratio ratio-16x9 mb-4">
+                            @{
+                                // Extract the video ID from the full YouTube URL
+                                // Extract the video ID from YouTube URL (handles both formats)
+                                string videoId = "";
+                                if (!string.IsNullOrEmpty(videoLink))
+                                {
+                                    if (videoLink.Contains("youtu.be/"))
+                                    {
+                                        // Handle youtu.be format: https://youtu.be/VIDEO_ID?si=...
+                                        var parts = videoLink.Split(new[] { "youtu.be/" }, StringSplitOptions.None);
+                                        if (parts.Length > 1)
+                                        {
+                                            videoId = parts[1];
+                                            // Remove any parameters after the video ID
+                                            int questionMarkPosition = videoId.IndexOf('?');
+                                            if (questionMarkPosition != -1)
+                                            {
+                                                videoId = videoId.Substring(0, questionMarkPosition);
+                                            }
+                                        }
+                                    }
+                                    else if (videoLink.Contains("v="))
+                                    {
+                                        // Handle youtube.com format: https://www.youtube.com/watch?v=VIDEO_ID
+                                        videoId = videoLink.Split("v=")[1];
+                                        // Remove any additional parameters after the video ID
+                                        int ampersandPosition = videoId.IndexOf('&');
+                                        if (ampersandPosition != -1)
+                                        {
+                                            videoId = videoId.Substring(0, ampersandPosition);
+                                        }
+                                    }
+                                }
+
+                                string link = "";
+                                if (!string.IsNullOrEmpty(videoId))
+                                {
+                                    link = $"https://www.youtube.com/embed/{videoId}";
+                                }
+                            }
+                            <iframe src=@link
+                                    allowfullscreen
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                            </iframe>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            Không có video cho bài giảng này
+                        </div>
+                    }
+
+                    <!-- Tư liệu bên dưới video -->
+                    <div class="mt-3">
+                        <h5 class="border-bottom pb-2 mb-3">Tư liệu</h5>
+                        @if (!string.IsNullOrEmpty(documentLink))
+                        {
+                            <div class="document-container p-3 border rounded">
+                                <a href="@documentLink" target="_blank" class="btn btn-outline-primary">
+                                    <i class="bi bi-file-earmark-text me-2"></i>Xem tài liệu
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info">
+                                Không có tài liệu cho bài giảng này
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Danh sách chương, bài tổng quan, bài giảng bên phải -->
+        <div class="col-lg-4 col-md-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Nội dung khóa học</h5>
+                </div>
+                <div class="card-body p-0">
+                    <!-- Danh sách chương (division) -->
+                    <div class="accordion" id="divisionAccordion">
+                        @if (divisions != null && divisions.Any())
+                        {
+                            @foreach (var division in divisions)
+                            {
+                                var divisionId = $"division_{division.id}";
+                                var isActive = selectedDivision?.id == division.id;
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button @(isActive ? "" : "collapsed")"
+                                                type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#@divisionId"
+                                                aria-expanded="@(isActive ? "true" : "false")">
+                                            <strong>@division.divisionName</strong>
+                                        </button>
+                                    </h2>
+                                    <div id="@divisionId" class="accordion-collapse collapse @(isActive ? "show" : "")" data-bs-parent="#divisionAccordion">
+                                        <div class="accordion-body p-0">
+                                            <!-- Danh sách bài tổng quan (lesson) -->
+                                            <div class="list-group list-group-flush" id="lessonList_@division.id">
+                                                @if (lessons != null && lessons.Any(l => l.division.id == division.id))
+                                                {
+                                                    @foreach (var lesson in lessons.Where(l => l.division.id == division.id))
+                                                    {
+                                                        var lessonId = $"lesson_{lesson.id}";
+                                                        var lessonActive = selectedLesson?.id == lesson.id;
+
+                                                        <div class="list-group-item py-3 px-3 @(lessonActive ? "active" : "")">
+                                                            <div class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#@lessonId" style="cursor: pointer;">
+                                                                <span>@lesson.lessonName</span>
+                                                                <i class="bi bi-chevron-down"></i>
+                                                            </div>
+
+                                                            <!-- Danh sách bài giảng (sublesson) -->
+                                                            <div class="collapse @(lessonActive ? "show" : "")" id="@lessonId">
+                                                                <div class="list-group list-group-flush mt-2 border-top">
+                                                                    @if (subLessons != null && subLessons.Any(sl => sl.lesson.id == lesson.id))
+                                                                    {
+                                                                        @foreach (var subLesson in subLessons.Where(sl => sl.lesson.id == lesson.id))
+                                                                        {
+                                                                            var isSubLessonActive = selectedSubLesson?.id == subLesson.id;
+
+                                                                            <a href="
+                                                                               @Url.Action("Index", "Lesson", new { classId = ViewBag.ClassId, sublessonId = subLesson.id })
+                        "
+                                                                               class="list-group-item list-group-item-action border-0 py-2 ps-4 @(isSubLessonActive ? "active" : "")">
+                                                                                <i class="bi bi-play-circle me-2"></i>@subLesson.subLessonName
+                                                                            </a>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="text-muted small py-2 ps-4">Không có bài giảng</div>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="list-group-item py-3 text-muted">Không có bài học</div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="p-3 text-center text-muted">
+                                <i class="bi bi-exclamation-circle d-block mb-2" style="font-size: 2rem;"></i>
+                                Không có chương nào được tìm thấy
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Auto-expand the currently active division and lesson
+            var activeSublesson = $('.list-group-item-action.active');
+            if (activeSublesson.length) {
+                activeSublesson.parents('.collapse').addClass('show');
+            }
+        });
+    </script>
+}

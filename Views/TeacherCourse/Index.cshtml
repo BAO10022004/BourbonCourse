@@ -1,0 +1,38 @@
+﻿@using Web_KhoaHoc.Models
+@{
+    ViewData["Title"] = "Danh sách khóa học";
+    Layout = "~/Views/Shared/home_layout.cshtml";
+    var classes = ViewBag.Class as List<Web_KhoaHoc.Models.Class>;
+}
+
+@* Update your view file to match the controller parameter *@
+<div class="results-container">
+    @if (classes == null || !classes.Any())
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <span>Không tìm thấy kết quả phù hợp.</span>
+        </div>
+    }
+    else
+    {
+        foreach (var i in classes)
+        {
+            <div class="teacher-card">
+                <div class="teacher-avatar">
+                    <img src="~/images/teacher-placeholder.jpg" alt="@i.className">
+                </div>
+                <div class="teacher-details">
+                    <h4 class="teacher-name">@i.className</h4>
+
+                    <div class="teacher-actions">
+                        <a href="@Url.Action("Index", "Lesson", new { classId = i.id , sublessonId=1})" class="view-btn">
+                            <i class="fas fa-eye"></i>
+                            <span>Chi tiết</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

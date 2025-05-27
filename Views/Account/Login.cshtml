@@ -1,0 +1,339 @@
+﻿@model Web_KhoaHoc.Models.Account
+@{
+    ViewBag.Title = "Đăng nhập";
+    Layout = "~/Views/Shared/log_in_layout.cshtml";
+}
+@section Styles {
+    <style>
+        /* Hiệu ứng background gradient chuyển động */
+body {
+    background: linear-gradient(-45deg, #3498db, #8e44ad, #2980b9, #9b59b6);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+/* Sử dụng container linh hoạt */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+/* Sử dụng đơn vị tương đối thay vì cố định */
+.login-container {
+    width: 100%;
+    max-width: 420px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 1rem;
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    transform: translateY(0);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(5px);
+    margin: clamp(0.5rem, 2vw, 1.25rem);
+    box-sizing: border-box;
+}
+
+.login-container:hover {
+    transform: translateY(-0.5rem);
+    box-shadow: 0 1.25rem 2.5rem rgba(0, 0, 0, 0.3);
+}
+
+.login-header {
+    background: linear-gradient(135deg, #3a7bd5, #2980b9);
+    color: white;
+    padding: clamp(1.25rem, 4vw, 1.75rem) 0;
+    text-align: center;
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hiệu ứng ánh sáng cho header */
+.login-header:before {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+    top: -80px;
+    left: -50%;
+    transition: all 0.8s;
+}
+
+.login-container:hover .login-header:before {
+    top: 100px;
+    left: 10%;
+}
+
+.login-header h2 {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
+}
+
+.login-form {
+    padding: clamp(1.25rem, 6vw, 2.2rem);
+    box-sizing: border-box;
+}
+
+.form-group {
+    margin-bottom: clamp(1rem, 4vw, 1.5rem);
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-size: clamp(0.85rem, 3vw, 0.95rem);
+    font-weight: 500;
+    transition: all 0.3s;
+    transform-origin: left;
+}
+
+.form-control {
+    width: 100%;
+    padding: clamp(0.75rem, 3vw, 0.9rem);
+    font-size: clamp(0.85rem, 3vw, 1rem);
+    border: 2px solid #e1e1e1;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    background-color: #f9f9f9;
+    color: #333;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    background-color: #fff;
+    transform: translateY(-2px);
+}
+
+/* Hiệu ứng focus cho label */
+.form-control:focus + label,
+.form-control:not(:placeholder-shown) + label {
+    transform: translateY(-25px) scale(0.85);
+    color: #3498db;
+}
+
+.text-danger {
+    display: block;
+    color: #e74c3c;
+    font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+    margin-top: 0.5rem;
+    font-weight: 500;
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: clamp(1rem, 4vw, 1.5rem);
+}
+
+.remember-me input {
+    margin-right: 0.5rem;
+    transform: scale(clamp(1, 1.1vw, 1.2));
+    cursor: pointer;
+}
+
+.remember-me label {
+    color: #555;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: clamp(0.85rem, 3vw, 0.95rem);
+}
+
+.btn-primary {
+    width: 100%;
+    background: linear-gradient(135deg, #3a7bd5, #2980b9);
+    color: white;
+    border: none;
+    padding: clamp(0.75rem, 3vw, 0.95rem);
+    font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    box-shadow: 0 0.3rem 1rem rgba(52, 152, 219, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2980b9, #3a7bd5);
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1.25rem rgba(52, 152, 219, 0.6);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 0.2rem 0.6rem rgba(52, 152, 219, 0.4);
+}
+
+/* Hiệu ứng gợn sóng khi click button */
+.btn-primary:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.btn-primary:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+.alt-actions {
+    margin-top: clamp(1.25rem, 5vw, 1.9rem);
+    text-align: center;
+    color: #555;
+    font-size: clamp(0.8rem, 3vw, 0.9rem);
+}
+
+.alt-actions a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+    padding: 2px 4px;
+    transition: all 0.3s;
+}
+
+/* Hiệu ứng gạch chân cho liên kết */
+.alt-actions a:before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #3498db;
+    transition: width 0.3s ease;
+}
+
+.alt-actions a:hover:before {
+    width: 100%;
+}
+
+.alt-actions a:hover {
+    color: #2980b9;
+}
+
+.validation-summary {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    padding: clamp(0.75rem, 3vw, 0.95rem);
+    border-radius: 0.5rem;
+    margin-bottom: clamp(1rem, 4vw, 1.5rem);
+    border-left: 4px solid #e74c3c;
+    font-size: clamp(0.85rem, 3vw, 0.95rem);
+}
+
+/* Card styling với thiết kế linh hoạt */
+.card {
+    border: none;
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 420px;
+    margin: clamp(0.5rem, 2vw, 1.25rem);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #3a7bd5, #2980b9);
+    color: white;
+    border: none;
+    padding: clamp(1.25rem, 4vw, 1.75rem) 0;
+    position: relative;
+    overflow: hidden;
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
+    text-align: center;
+}
+
+.card-header:before {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+    top: -80px;
+    left: -50%;
+    transition: all 0.8s;
+}
+
+.card:hover .card-header:before {
+    top: 100px;
+    left: 10%;
+}
+
+.card-body {
+    padding: clamp(1.25rem, 6vw, 2.2rem);
+    box-sizing: border-box;
+}
+    </style>
+}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-5">
+            <div class="card-header text-center">
+                <h2>@ViewBag.Title</h2>
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(m => m.username, new { @class = "control-label" })
+                        @Html.TextBoxFor(m => m.username, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.username, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(m => m.password, new { @class = "control-label" })
+                        @Html.PasswordFor(m => m.password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.password, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
